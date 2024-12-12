@@ -332,4 +332,43 @@
 
 			});
 
+			document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".contact-form");
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Collect form data
+        const formData = new FormData(form);
+        const name = formData.get("name");
+        const email = formData.get("email");
+        const message = formData.get("message");
+
+        // Validate form data
+        if (!name || !email || !message) {
+            alert("All fields are required!");
+            return;
+        }
+
+        try {
+            // Example using EmailJS (replace YOUR_SERVICE_ID, YOUR_TEMPLATE_ID, YOUR_USER_ID)
+            const response = await emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                name: name,
+                email: email,
+                message: message,
+            }, "YOUR_USER_ID");
+
+            if (response.status === 200) {
+                alert("Message sent successfully!");
+                form.reset(); // Clear the form fields
+            } else {
+                alert("Failed to send the message. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error sending the message:", error);
+            alert("An error occurred. Please try again later.");
+        }
+    });
+});
+
 })(jQuery);
